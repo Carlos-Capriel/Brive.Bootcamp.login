@@ -14,7 +14,7 @@ namespace Brive.Bootcamp.login.DBContext
         {
             modelBuilder.Entity<Usuarios>(eb =>
             {
-                eb.HasKey(c => new {c.Id);
+                eb.HasKey(c => new { c.Id });
             });
         }
 

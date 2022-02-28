@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Brive.Bootcamp.login.Models
 {
+    [Table("Users")]
     public class Usuarios
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
