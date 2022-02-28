@@ -12,12 +12,12 @@ namespace Brive.Bootcamp.login.DBContext
            
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Usuarios>(eb =>
+            modelBuilder.Entity<Users>(eb =>
             {
                 eb.HasKey(c => new { c.Id });
             });
         }
 
-        public DbSet<Usuarios> Usuarios { get; set; }
+        public DbSet<Users> Usuarios { get; set; }
     }
 }
