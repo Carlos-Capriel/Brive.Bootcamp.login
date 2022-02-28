@@ -1,4 +1,5 @@
 ﻿using Brive.Bootcamp.login.Models;
+using Brive.Bootcamp.login.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -10,6 +11,12 @@ namespace Brive.Bootcamp.login.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IUsers _users;
+        public UsersController(IUsers users)
+        {
+            _users = users;
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]UsersTest user)
         {
@@ -25,6 +32,12 @@ namespace Brive.Bootcamp.login.Controllers
             }
 
             return Ok(new { status = 202, Email = user.Email, Password = user.Password });
+        }
+
+        [HttpGet]
+        public ActionResult Get()
+        {
+            return Ok(new { Users = _users.getUser(), status = 200 });
         }
     }
 }
