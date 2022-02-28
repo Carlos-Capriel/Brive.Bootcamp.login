@@ -1,9 +1,5 @@
 ﻿using Brive.Bootcamp.login.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Brive.Bootcamp.login.DBContext
 {
@@ -18,7 +14,7 @@ namespace Brive.Bootcamp.login.DBContext
         {
             modelBuilder.Entity<Usuarios>(eb =>
             {
-                eb.HasKey();
+                eb.HasKey(c => new {c.Id);
             });
         }
 
