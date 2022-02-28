@@ -65,6 +65,8 @@ namespace Brive.Bootcamp.login
 
             app.UseRouting();
 
+            app.UseCors("Login");
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
