@@ -1,4 +1,6 @@
 using Brive.Bootcamp.login.DBContext;
+using Brive.Bootcamp.login.Services;
+using Brive.Bootcamp.login.Services.Implementation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -39,12 +41,14 @@ namespace Brive.Bootcamp.login
                 options.UseSqlServer(Configuration.GetConnectionString("Connection"))
             );
 
+            services.AddTransient<IUsers, ImpUsers>();
             services.AddCors(o => o.AddPolicy("Login", builder =>
             {
                 builder.AllowAnyOrigin()
                  .AllowAnyMethod()
                  .AllowAnyHeader();
             }));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
