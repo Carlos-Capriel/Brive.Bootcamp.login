@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Brive.Bootcamp.login.Models;
 
 namespace Brive.Bootcamp.login.Services
 {
     public interface IUsers
     {
-        public int getUser();
+        Users[] getUser();
     }
 }

@@ -1,15 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Brive.Bootcamp.login.DBContext;
+using Brive.Bootcamp.login.Models;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Brive.Bootcamp.login.Services.Implementation
 {
     public class ImpUsers : IUsers
     {
-        public int getUser()
+        private readonly ProjectContext _context;
+        public ImpUsers(ProjectContext context)
         {
-            return 1;
+            _context = context;
+        }
+        public Users[] getUser()
+        {
+            return _context.Users.ToArray();
         }
     }
 }

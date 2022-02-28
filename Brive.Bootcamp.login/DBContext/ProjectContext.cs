@@ -18,6 +18,6 @@ namespace Brive.Bootcamp.login.DBContext
             });
         }
 
-        public DbSet<Users> Usuarios { get; set; }
+        public DbSet<Users> Users { get; set; }
     }
 }
