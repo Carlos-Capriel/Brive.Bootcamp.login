@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Brive.Bootcamp.login.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,14 +12,21 @@ namespace Brive.Bootcamp.login.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        [HttpGet("{email}/{password}")]
-        public async Task<IActionResult> Get(string email, string password)
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]UsersTest user)
         {
-            if (email == null || password == null)
+            if (user.Email == null || user.Password == null)
             {
-                return BadRequest();
+                return BadRequest(new { status = 400, information = "Missing email or password"});
             }
-            return Ok(new { Email = email, Password =  password });
+
+            // TODO Validar que el registro exista en la BD
+            if (!user.Email.Equals("Carlos") || !user.Password.Equals("CaprielG"))
+            {
+                return BadRequest(new { status = 400, informaton = "Incorrect Email or password" });
+            }
+
+            return Ok(new { status = 202, Email = user.Email, Password = user.Password });
         }
     }
 }
