@@ -20,18 +20,18 @@ namespace Brive.Bootcamp.login.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]UsersTest user)
         {
-            if (user.Email == null || user.Password == null)
+            if (user.Email == null || user.Password == null 
+                    || user.Email == "" || user.Password == "")
             {
                 return BadRequest(new { status = 400, information = "Missing email or password"});
             }
 
-            // TODO Validar que el registro exista en la BD
-            if (!user.Email.Equals("Carlos") || !user.Password.Equals("CaprielG"))
+            if (!_users.userExist(user.Email, user.Password))
             {
-                return BadRequest(new { status = 400, informaton = "Incorrect Email or password" });
+                return NotFound(new { status = 404, information = "Incorrect email or password"});
             }
 
-            return Ok(new { status = 202, Email = user.Email, Password = user.Password });
+            return Ok(new { status = 202, Email = user.Email, Password = user.Password});
         }
 
         [HttpGet]

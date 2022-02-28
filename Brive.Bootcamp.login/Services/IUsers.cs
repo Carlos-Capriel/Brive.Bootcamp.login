@@ -5,5 +5,7 @@ namespace Brive.Bootcamp.login.Services
     public interface IUsers
     {
         Users[] getUser();
+        bool userExist(string email, string password); 
     }
+
 }
