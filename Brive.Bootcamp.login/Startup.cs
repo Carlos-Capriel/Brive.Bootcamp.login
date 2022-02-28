@@ -1,7 +1,11 @@
+using Brive.Bootcamp.login.DBContext;
+using Brive.Bootcamp.login.Services;
+using Brive.Bootcamp.login.Services.Implementation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,6 +36,19 @@ namespace Brive.Bootcamp.login
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Brive.Bootcamp.login", Version = "v1" });
             });
+
+            services.AddDbContext<ProjectContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("Connection"))
+            );
+
+            services.AddTransient<IUsers, ImpUsers>();
+            services.AddCors(o => o.AddPolicy("Login", builder =>
+            {
+                builder.AllowAnyOrigin()
+                 .AllowAnyMethod()
+                 .AllowAnyHeader();
+            }));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +64,8 @@ namespace Brive.Bootcamp.login
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("Login");
 
             app.UseAuthorization();
 
