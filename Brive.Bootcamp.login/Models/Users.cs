@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Brive.Bootcamp.login.Models
 {
     [Table("Users")]
-    public class Usuarios
+    public class Users
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
