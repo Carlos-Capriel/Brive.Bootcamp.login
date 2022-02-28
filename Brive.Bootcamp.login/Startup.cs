@@ -1,6 +1,7 @@
 using Brive.Bootcamp.login.DBContext;
 using Brive.Bootcamp.login.Services;
 using Brive.Bootcamp.login.Services.Implementation;
+using Brive.Bootcamp.login.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -42,6 +43,7 @@ namespace Brive.Bootcamp.login
             );
 
             services.AddTransient<IUsers, ImpUsers>();
+            services.AddTransient<IGlobalUtilities, ImpGlobalUtilities>();
             services.AddCors(o => o.AddPolicy("Login", builder =>
             {
                 builder.AllowAnyOrigin()
