@@ -1,13 +1,11 @@
 ﻿using Brive.Bootcamp.login.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Brive.Bootcamp.login.Controllers
 {
+    [EnableCors("Login")]
     [Route("login/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
