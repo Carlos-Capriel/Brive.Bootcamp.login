@@ -1,5 +1,6 @@
 ﻿using Brive.Bootcamp.login.Models;
 using Brive.Bootcamp.login.Services;
+using Brive.Bootcamp.login.Utilities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -11,33 +12,45 @@ namespace Brive.Bootcamp.login.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUsers _users;
-        public UsersController(IUsers users)
+        private readonly IGlobalUtilities _utilities;
+        public UsersController(IGlobalUtilities utilities)
         {
-            _users = users;
+            _utilities = utilities;
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]UsersTest user)
         {
-            if (user.Email == null || user.Password == null)
+            if (user.Email == null || user.Password == null 
+                    || user.Email == "" || user.Password == "")
             {
                 return BadRequest(new { status = 400, information = "Missing email or password"});
             }
 
-            // TODO Validar que el registro exista en la BD
-            if (!user.Email.Equals("Carlos") || !user.Password.Equals("CaprielG"))
+            if (!_utilities.verifyUser(user.Email, user.Password))
             {
-                return BadRequest(new { status = 400, informaton = "Incorrect Email or password" });
+                return NotFound(new { status = 404, information = "Incorrect email or password"});
             }
 
-            return Ok(new { status = 202, Email = user.Email, Password = user.Password });
+            return Ok(new { status = 202, Email = user.Email, Password = user.Password});
         }
 
-        [HttpGet]
-        public ActionResult Get()
+        [HttpPost("register")]
+        public ActionResult Post([FromBody]Users user)
         {
-            return Ok(new { Users = _users.getUser(), status = 200 });
+            bool result = _utilities.SaveUser(user);
+            if (result)
+            {
+                return Ok(new { status = 200, information = "Done" });
+            }
+
+            return BadRequest(new { status = 400, information = "Exist" });
+        }
+
+        [HttpGet("{password}")]
+        public ActionResult Get(string password)
+        {
+            return Ok(new {status = 200 , hash = _utilities.hashPassword(password) });
         }
     }
 }

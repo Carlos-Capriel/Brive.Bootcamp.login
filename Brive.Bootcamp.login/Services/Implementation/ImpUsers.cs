@@ -15,5 +15,23 @@ namespace Brive.Bootcamp.login.Services.Implementation
         {
             return _context.Users.ToArray();
         }
+
+        public bool userExist(string email, string password)
+        {
+            
+            var exist = _context.Users.Where(b => b.Email == email && b.Password == password);
+            if (!(exist.Count() > 0))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async void SaveUser(Users user)
+        {
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }
