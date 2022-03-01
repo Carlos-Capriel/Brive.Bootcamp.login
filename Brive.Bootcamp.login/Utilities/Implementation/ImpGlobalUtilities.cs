@@ -33,6 +33,7 @@ namespace Brive.Bootcamp.login.Utilities
 
         public bool verifyUser(string email, string password)
         {
+            password = hashPassword(password);
             return _users.userExist(email, password);
         }
         
