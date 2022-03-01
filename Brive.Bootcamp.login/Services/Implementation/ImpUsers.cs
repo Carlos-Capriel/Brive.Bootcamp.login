@@ -18,7 +18,6 @@ namespace Brive.Bootcamp.login.Services.Implementation
 
         public bool userExist(string email, string password)
         {
-            
             var exist = _context.Users.Where(b => b.Email == email && b.Password == password);
             if (!(exist.Count() > 0))
             {
