@@ -35,6 +35,18 @@ namespace Brive.Bootcamp.login.Controllers
             return Ok(new { status = 202, Email = user.Email, Password = user.Password});
         }
 
+        [HttpPost("register")]
+        public ActionResult Post([FromBody]Users user)
+        {
+            bool result = _utilities.SaveUser(user);
+            if (result)
+            {
+                return Ok(new { status = 200, information = "Done" });
+            }
+
+            return BadRequest(new { status = 400, information = "Exist" });
+        }
+
         [HttpGet("{password}")]
         public ActionResult Get(string password)
         {

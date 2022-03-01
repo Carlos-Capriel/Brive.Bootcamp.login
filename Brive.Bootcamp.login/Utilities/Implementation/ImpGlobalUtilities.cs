@@ -1,4 +1,5 @@
-﻿using Brive.Bootcamp.login.Services;
+﻿using Brive.Bootcamp.login.Models;
+using Brive.Bootcamp.login.Services;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,20 @@ namespace Brive.Bootcamp.login.Utilities
         public ImpGlobalUtilities(IUsers users)
         {
             _users = users;
+        }
+
+        public bool SaveUser(Users user)
+        {
+            if (user == null || verifyUser(user.Email, user.Password))
+            {
+                return false;
+            }
+            
+            user.Password = hashPassword(user.Password);
+
+            _users.SaveUser(user);
+
+            return true;
         }
 
         public bool verifyUser(string email, string password)
