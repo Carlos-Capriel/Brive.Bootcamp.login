@@ -1,9 +1,7 @@
 ﻿using Brive.Bootcamp.login.Models;
-using Brive.Bootcamp.login.Services;
 using Brive.Bootcamp.login.Utilities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace Brive.Bootcamp.login.Controllers
 {
@@ -19,7 +17,7 @@ namespace Brive.Bootcamp.login.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]UsersTest user)
+        public IActionResult Post([FromBody]UsersAccount user)
         {
             if (user.Email == null || user.Password == null 
                     || user.Email == "" || user.Password == "")
@@ -27,12 +25,12 @@ namespace Brive.Bootcamp.login.Controllers
                 return BadRequest(new { status = 400, information = "Missing email or password"});
             }
 
-            if (!_utilities.verifyUser(user.Email, user.Password))
+            if (!_utilities.verifyAccount(user.Email, user.Password))
             {
                 return NotFound(new { status = 404, information = "Incorrect email or password"});
             }
 
-            return Ok(new { status = 202, Email = user.Email, Password = user.Password});
+            return Accepted(new { status = 202, Email = user.Email, Password = user.Password});
         }
 
         [HttpPost("register")]
@@ -41,7 +39,7 @@ namespace Brive.Bootcamp.login.Controllers
             bool result = _utilities.SaveUser(user);
             if (result)
             {
-                return Ok(new { status = 200, information = "Done" });
+                return Created("/login/Users/register", new { status = 201, information = "Done" });
             }
 
             return BadRequest(new { status = 400, information = "Exist" });
