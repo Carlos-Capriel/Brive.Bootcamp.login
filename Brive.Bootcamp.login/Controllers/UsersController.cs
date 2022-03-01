@@ -22,15 +22,15 @@ namespace Brive.Bootcamp.login.Controllers
             if (user.Email == null || user.Password == null 
                     || user.Email == "" || user.Password == "")
             {
-                return BadRequest(new { status = 400, information = "Missing email or password"});
+                return BadRequest(_utilities.messageResponse(400, "Incorrect email or password"));
             }
 
             if (!_utilities.verifyAccount(user.Email, user.Password))
-            {
-                return NotFound(new { status = 404, information = "Incorrect email or password"});
+            {         
+                return NotFound(_utilities.messageResponse(404, "Incorrect email or password"));
             }
 
-            return Accepted(new { status = 202, Email = user.Email, Password = user.Password});
+            return Accepted(_utilities.messageResponse(202, "Accepted"));
         }
 
         [HttpPost("register")]
@@ -42,7 +42,7 @@ namespace Brive.Bootcamp.login.Controllers
                 return Created("/login/Users/register", new { status = 201, information = "Done" });
             }
 
-            return BadRequest(new { status = 400, information = "Exist" });
+            return BadRequest(_utilities.messageResponse(400, "Exist"));
         }
 
         [HttpGet("{password}")]

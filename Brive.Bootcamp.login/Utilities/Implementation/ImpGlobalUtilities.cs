@@ -48,5 +48,14 @@ namespace Brive.Bootcamp.login.Utilities
 
             return hashed;
         }
+
+        public object messageResponse(int status, string info)
+        {
+            return new
+            {
+                status = status,
+                information = info
+            };
+        }
     }
 }
