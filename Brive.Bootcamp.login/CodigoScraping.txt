@@ -1,0 +1,20 @@
+﻿            // ** instalar NUGET ScrapySharp ***
+            
+            string urlBase = "https://www.occ.com.mx/empleos";
+            string empresa = "Coca cola";  
+            empresa = empresa.ToLower();
+            empresa = empresa.Replace(' ', '-');
+            HtmlWeb oWeb = new HtmlWeb();
+            HtmlDocument doc = oWeb.Load($"{urlBase}/de-{empresa}");
+
+            HtmlNode nodo = doc.DocumentNode.SelectSingleNode("/html/body/div[1]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/p");
+            string textoNodo = nodo.InnerText;
+            string[] contenido = textoNodo.Split(' ');
+            try
+            {
+                int numeroVacantes = Int32.Parse(contenido[0]);
+                Console.WriteLine(textoNodo);
+                Console.WriteLine(numeroVacantes);
+            } catch(Exception e) {
+                Console.WriteLine("Empresa no encontrada");
+            }
