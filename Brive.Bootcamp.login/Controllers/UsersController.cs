@@ -56,6 +56,7 @@ namespace Brive.Bootcamp.login.Controllers
         }
 
         [HttpGet("{password}")]
+        [AllowAnonymous]
         public ActionResult Get(string password)
         {
             return Ok(new {status = 200 , hash = _utilities.hashPassword(password) });
