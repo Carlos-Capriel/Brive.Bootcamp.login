@@ -1,7 +1,9 @@
-﻿using Brive.Bootcamp.login.Models;
+﻿using Brive.Bootcamp.login.Helpers;
+using Brive.Bootcamp.login.Models;
 using Brive.Bootcamp.login.Utilities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Brive.Bootcamp.login.Controllers
 {
@@ -11,8 +13,10 @@ namespace Brive.Bootcamp.login.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IGlobalUtilities _utilities;
-        public UsersController(IGlobalUtilities utilities)
+        private readonly IConfiguration _conf;
+        public UsersController(IGlobalUtilities utilities, IConfiguration config)
         {
+            _conf = config;
             _utilities = utilities;
         }
 
@@ -29,8 +33,11 @@ namespace Brive.Bootcamp.login.Controllers
             {         
                 return NotFound(_utilities.messageResponse(404, "Incorrect email or password"));
             }
+            string secret = this._conf.GetValue<string>("Secret");
+            var jwtHelper = new JWTHelper(secret);
+            var token = jwtHelper.createToken(user.Email);
 
-            return Accepted(_utilities.messageResponse(202, "Accepted"));
+            return Accepted(_utilities.messageResponse(202, token));
         }
 
         [HttpPost("register")]

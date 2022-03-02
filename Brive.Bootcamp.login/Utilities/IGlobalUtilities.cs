@@ -8,5 +8,6 @@ namespace Brive.Bootcamp.login.Utilities
         bool verifyAccount(string email, string password);
         string hashPassword(string password);
         object messageResponse(int status, string info);
+        // string Token(string email);
     }
 }
