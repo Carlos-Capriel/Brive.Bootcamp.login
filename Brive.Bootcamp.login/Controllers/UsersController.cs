@@ -1,15 +1,17 @@
 ﻿using Brive.Bootcamp.login.Helpers;
 using Brive.Bootcamp.login.Models;
 using Brive.Bootcamp.login.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
 namespace Brive.Bootcamp.login.Controllers
 {
-    [EnableCors("Login")]
+    //[EnableCors("Login")]
     [Route("login/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IGlobalUtilities _utilities;
@@ -21,6 +23,7 @@ namespace Brive.Bootcamp.login.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Post([FromBody]UsersAccount user)
         {
             if (user.Email == null || user.Password == null 
