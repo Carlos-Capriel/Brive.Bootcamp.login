@@ -22,7 +22,7 @@ namespace Brive.Bootcamp.login.Controllers
             if (user.Email == null || user.Password == null 
                     || user.Email == "" || user.Password == "")
             {
-                return BadRequest(_utilities.messageResponse(400, "Incorrect email or password"));
+                return BadRequest(_utilities.messageResponse(400, "Missing something"));
             }
 
             if (!_utilities.verifyAccount(user.Email, user.Password))
