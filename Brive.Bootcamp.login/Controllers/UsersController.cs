@@ -17,20 +17,20 @@ namespace Brive.Bootcamp.login.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]UsersAccount user)
+        public IActionResult Post([FromBody]UsersAccount userAccount)
         {
-            if (user.Email == null || user.Password == null 
-                    || user.Email == "" || user.Password == "")
+            if (userAccount.Email == null || userAccount.Password == null 
+                    || userAccount.Email == "" || userAccount.Password == "")
             {
                 return BadRequest(_utilities.messageResponse(400, "Missing something"));
             }
 
-            if (!_utilities.verifyAccount(user.Email, user.Password))
+            if (!_utilities.verifyAccount(userAccount.Email, userAccount.Password))
             {         
                 return NotFound(_utilities.messageResponse(404, "Incorrect email or password"));
             }
 
-            return Accepted(_utilities.messageResponse(202, "Accepted", "UserName", _utilities.GetUserName(user.Email)));
+            return Accepted(_utilities.messageResponse(202, "Accepted", "UserName", _utilities.GetUserName(userAccount.Email)));
         }
 
         [HttpPost("register")]
