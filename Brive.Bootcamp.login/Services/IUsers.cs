@@ -9,6 +9,7 @@ namespace Brive.Bootcamp.login.Services
 
         string GetUserName(string email);
         void SaveUser(Users user);
+        bool EmailExist(string email);
     }
 
 }

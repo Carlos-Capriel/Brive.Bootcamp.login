@@ -28,6 +28,17 @@ namespace Brive.Bootcamp.login.Services.Implementation
             return true;
         }
 
+        public bool EmailExist(string email)
+        {
+            var exist = _context.Users.Where(b => b.Email == email);
+            if (!(exist.Count() > 0))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public string GetUserName(string email)
         {
             var registro = _context.Users.Where(b => b.Email == email).Select(n => n.Name);

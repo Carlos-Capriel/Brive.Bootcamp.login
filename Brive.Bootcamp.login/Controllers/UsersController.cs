@@ -36,13 +36,28 @@ namespace Brive.Bootcamp.login.Controllers
         [HttpPost("register")]
         public ActionResult Post([FromBody]Users user)
         {
-            bool result = _utilities.SaveUser(user);
-            if (result)
+            if(user.Email == "" || user.Email == null || user.LastNameM == "" || user.LastNameM == null || user.LastNameP == ""
+                || user.LastNameP == null || user.Password == "" || user.Password == null)
             {
-                return Created("/login/Users/register", new { status = 201, information = "Done" });
+              
+                return BadRequest(_utilities.messageResponse(400, "Some is missing"));
             }
 
-            return BadRequest(_utilities.messageResponse(400, "Exist"));
+            if (_utilities.VerifyEmail(user.Email))
+            {
+                if (_utilities.VerifyPassword(user.Password))
+                {
+                    return 
+                        _utilities.SaveUser(user) ? 
+                        Created("/login/Users/register", new { status = 201, information = "Done" }) 
+                        :
+                        BadRequest(_utilities.messageResponse(400, "Email ya registrado"));
+                }
+
+                return BadRequest(_utilities.messageResponse(400, "Invalid password"));
+            }
+
+            return BadRequest(_utilities.messageResponse(400, "Invalid email"));
         }
 
         [HttpGet("{password}")]
