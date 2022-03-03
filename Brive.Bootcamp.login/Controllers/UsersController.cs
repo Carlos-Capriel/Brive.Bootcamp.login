@@ -65,5 +65,16 @@ namespace Brive.Bootcamp.login.Controllers
         {
             return Ok(new {status = 200 , hash = _utilities.hashPassword(password) });
         }
+
+        [HttpPost("validate")]
+        public IActionResult Post([FromBody]string email)
+        {
+            if (_utilities.EmailExist(email))
+            {
+                return Ok(_utilities.messageResponse(200, "Email Found"));
+            }
+
+            return NotFound(_utilities.messageResponse(400, "Email not found"));
+        }
     }
 }
