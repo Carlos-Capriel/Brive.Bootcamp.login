@@ -30,7 +30,7 @@ namespace Brive.Bootcamp.login.Controllers
                 return NotFound(_utilities.messageResponse(404, "Incorrect email or password"));
             }
 
-            return Accepted(_utilities.messageResponse(202, "Accepted"));
+            return Accepted(_utilities.messageResponse(202, "Accepted", "UserName", _utilities.GetUserName(user.Email)));
         }
 
         [HttpPost("register")]

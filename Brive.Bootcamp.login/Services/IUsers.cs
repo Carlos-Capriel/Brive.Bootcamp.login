@@ -6,6 +6,8 @@ namespace Brive.Bootcamp.login.Services
     {
         Users[] getUser();
         bool userExist(string email, string password);
+
+        string GetUserName(string email);
         void SaveUser(Users user);
     }
 

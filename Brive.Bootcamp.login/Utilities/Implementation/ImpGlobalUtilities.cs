@@ -49,12 +49,26 @@ namespace Brive.Bootcamp.login.Utilities
             return hashed;
         }
 
+        public string GetUserName(string email)
+        {
+            return _users.GetUserName(email);
+        }
+
         public object messageResponse(int status, string info)
         {
             return new
             {
                 status = status,
                 information = info
+            };
+        }
+        public object messageResponse(int status, string info, string key, string value)
+        {
+            return new
+            {
+                status = status,
+                information = info,
+                key = value
             };
         }
     }

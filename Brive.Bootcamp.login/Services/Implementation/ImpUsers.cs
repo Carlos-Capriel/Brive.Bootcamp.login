@@ -1,5 +1,6 @@
 ﻿using Brive.Bootcamp.login.DBContext;
 using Brive.Bootcamp.login.Models;
+using System;
 using System.Linq;
 
 namespace Brive.Bootcamp.login.Services.Implementation
@@ -25,6 +26,15 @@ namespace Brive.Bootcamp.login.Services.Implementation
             }
 
             return true;
+        }
+
+        public string GetUserName(string email)
+        {
+            var registro = _context.Users.Where(b => b.Email == email).Select(n => n.Name);
+
+            string[] valor = registro.ToArray();
+
+            return valor[0];
         }
 
         public async void SaveUser(Users user)
