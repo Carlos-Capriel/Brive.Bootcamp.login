@@ -53,7 +53,7 @@ namespace Brive.Bootcamp.login.Services.Implementation
         {
             var registro = _context.Users.Where(b => b.Email == email).Select(n => n.Password);
             string[] register = registro.ToArray();
-            if (register[0].Equals(newPassword))
+            if (register[0].Trim().Equals(newPassword))
             {
                 return false;
             }
