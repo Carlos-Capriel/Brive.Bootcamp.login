@@ -19,6 +19,7 @@ namespace Brive.Bootcamp.login.Services.Implementation
 
         public bool userExist(string email, string password)
         {
+            //la contraseña ya se recibe hasheada
             var exist = _context.Users.Where(b => b.Email == email && b.Password == password);
             if (!(exist.Count() > 0))
             {
@@ -32,6 +33,27 @@ namespace Brive.Bootcamp.login.Services.Implementation
         {
             var exist = _context.Users.Where(b => b.Email == email);
             if (!(exist.Count() > 0))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool UpdatePassword(string email, string newPassword)
+        {
+            var user = _context.Users.FirstOrDefault(item => item.Email == email);
+            user.Password = newPassword;
+            _context.SaveChanges();
+
+            return true;
+        }
+
+        public bool PasswordNotTheSame(string email, string newPassword)
+        {
+            var registro = _context.Users.Where(b => b.Email == email).Select(n => n.Password);
+            string[] register = registro.ToArray();
+            if (register[0].Equals(newPassword))
             {
                 return false;
             }

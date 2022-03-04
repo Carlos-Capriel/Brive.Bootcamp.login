@@ -48,7 +48,7 @@ namespace Brive.Bootcamp.login.Controllers
                 if (_utilities.VerifyPassword(user.Password))
                 {
                     return 
-                        _utilities.SaveUser(user) ? 
+                        _utilities.SaveUser(user) ? // hasheo en SaveUser
                         Created("/login/Users/register", new { status = 201, information = "Done" }) 
                         :
                         BadRequest(_utilities.messageResponse(400, "Email ya registrado"));
@@ -60,18 +60,30 @@ namespace Brive.Bootcamp.login.Controllers
             return BadRequest(_utilities.messageResponse(400, "Invalid email"));
         }
 
-        [HttpGet("{password}")]
-        public ActionResult Get(string password)
+        [HttpPost("password")]
+        public ActionResult Post(string password, string confirmPassword)
         {
             return Ok(new {status = 200 , hash = _utilities.hashPassword(password) });
         }
 
-        [HttpPost("validate")]
-        public IActionResult Post([FromBody]string email)
+        [HttpPut("update")]
+        public IActionResult Put([FromBody]UserUpdatePassword user)
         {
-            if (_utilities.EmailExist(email))
+            if (_utilities.EmailExist(user.Email))
             {
-                return Ok(_utilities.messageResponse(200, "Email Found"));
+                if (user.Password == user.ConfirmPassword)
+                {
+                    if (_utilities.PasswordNotTheSame(user.Email, _utilities.hashPassword(user.Password)) && _utilities.VerifyPassword(user.Password))
+                    {
+
+                        _utilities.UpdatePassword(user.Email, user.Password);
+                        return Ok(_utilities.messageResponse(200, "Updated password")) ;
+                    }
+
+                    return BadRequest(_utilities.messageResponse(400, "Wrong password")); // el password nuevo es el mismo al viejo
+                }
+
+                return BadRequest(_utilities.messageResponse(400, "Not match password")); // las contraseñas no son iguales
             }
 
             return NotFound(_utilities.messageResponse(404, "Email not found"));

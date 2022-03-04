@@ -17,7 +17,7 @@ namespace Brive.Bootcamp.login.Utilities
             _users = users;
         }
 
-        public bool SaveUser(Users user)
+        public bool SaveUser(Users user) // en el controller se usan los metodos de validacion de email y password valido
         {
             if (user == null || EmailExist(user.Email))
             {
@@ -48,6 +48,7 @@ namespace Brive.Bootcamp.login.Utilities
         {
             return _users.EmailExist(email);
         }
+
         public string hashPassword(string passwordU) 
         {
             byte[] salt = new byte[128 / 8];
@@ -66,12 +67,24 @@ namespace Brive.Bootcamp.login.Utilities
 
         public bool VerifyPassword(string password)
         {
-            Regex regex = new Regex("^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[:word:]).*$");
+            Regex regex = new Regex("^(?=.{8,}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\\W)");
             if (regex.IsMatch(password))
             {
                 return true;
             }
             return false;
+        }
+
+        public bool PasswordNotTheSame(string email, string password)
+        {
+            return _users.PasswordNotTheSame(email, password);
+        }
+
+        public int UpdatePassword(string email, string password)
+        {
+            password = hashPassword(password);
+            _users.UpdatePassword(email, password);
+            return 1;
         }
 
         public string GetUserName(string email)
