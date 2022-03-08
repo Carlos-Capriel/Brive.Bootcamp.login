@@ -16,5 +16,6 @@ namespace Brive.Bootcamp.login.Utilities
         string GetUserName(string email);
         object messageResponse(int status, string info);
         object messageResponse(int status, string info, string key, string value);
+        // string Token(string email);
     }
 }
