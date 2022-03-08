@@ -38,7 +38,8 @@ namespace Brive.Bootcamp.login.Utilities
 
         public bool VerifyEmail(string email)
         {
-            if ((new EmailAddressAttribute().IsValid(email))) {
+            Regex regex = new Regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
+            if (regex.IsMatch(email)) {
                 return true;
             }
             return false;
