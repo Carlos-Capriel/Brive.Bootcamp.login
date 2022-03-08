@@ -2,6 +2,9 @@
 using Brive.Bootcamp.login.Services;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 
 namespace Brive.Bootcamp.login.Utilities
 {
@@ -14,9 +17,9 @@ namespace Brive.Bootcamp.login.Utilities
             _users = users;
         }
 
-        public bool SaveUser(Users user)
+        public bool SaveUser(Users user) // en el controller se usan los metodos de validacion de email y password valido
         {
-            if (user == null || verifyAccount(user.Email, user.Password))
+            if (user == null || EmailExist(user.Email))
             {
                 return false;
             }
@@ -32,7 +35,20 @@ namespace Brive.Bootcamp.login.Utilities
             password = hashPassword(password);
             return _users.userExist(email, password);
         }
-        
+
+        public bool VerifyEmail(string email)
+        {
+            if ((new EmailAddressAttribute().IsValid(email))) {
+                return true;
+            }
+            return false;
+        }
+
+        public bool EmailExist(string email)
+        {
+            return _users.EmailExist(email);
+        }
+
         public string hashPassword(string passwordU) 
         {
             byte[] salt = new byte[128 / 8];
@@ -49,12 +65,48 @@ namespace Brive.Bootcamp.login.Utilities
             return hashed;
         }
 
+        public bool VerifyPassword(string password)
+        {
+            Regex regex = new Regex("^(?=.{8,}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\\W)");
+            if (regex.IsMatch(password))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool PasswordNotTheSame(string email, string password)
+        {
+            return _users.PasswordNotTheSame(email, password);
+        }
+
+        public int UpdatePassword(string email, string password)
+        {
+            password = hashPassword(password);
+            _users.UpdatePassword(email, password);
+            return 1;
+        }
+
+        public string GetUserName(string email)
+        {
+            return _users.GetUserName(email);
+        }
+
         public object messageResponse(int status, string info)
         {
             return new
             {
                 status = status,
                 information = info
+            };
+        }
+        public object messageResponse(int status, string info, string key, string value)
+        {
+            return new
+            {
+                status = status,
+                information = info,
+                key = value
             };
         }
     }
