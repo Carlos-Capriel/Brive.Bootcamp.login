@@ -73,7 +73,7 @@ namespace Brive.Bootcamp.login.Services.Implementation
         public async void SaveUser(Users user)
         {
             await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            _context.SaveChangesAsync();
         }
     }
 }

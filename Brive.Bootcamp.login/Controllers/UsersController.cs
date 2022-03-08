@@ -20,7 +20,7 @@ namespace Brive.Bootcamp.login.Controllers
         public IActionResult Post([FromBody]UsersAccount userAccount)
         {
             if (userAccount.Email == null || userAccount.Password == null 
-                    || userAccount.Email == "" || userAccount.Password == "")
+                    || userAccount.Email == "" || userAccount.Password == "" || !_utilities.VerifyEmail(userAccount.Email))
             {
                 return BadRequest(_utilities.messageResponse(400, "Missing something"));
             }
@@ -54,10 +54,10 @@ namespace Brive.Bootcamp.login.Controllers
                         BadRequest(_utilities.messageResponse(400, "Email ya registrado"));
                 }
 
-                return BadRequest(_utilities.messageResponse(400, "Invalid password"));
+                return BadRequest(_utilities.messageResponse(400, "Password invalido"));
             }
 
-            return BadRequest(_utilities.messageResponse(400, "Invalid email"));
+            return BadRequest(_utilities.messageResponse(400, "Email invalido"));
         }
 
         [HttpPost("password")]
