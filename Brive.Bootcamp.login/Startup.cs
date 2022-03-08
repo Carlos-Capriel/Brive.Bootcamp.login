@@ -2,6 +2,7 @@ using Brive.Bootcamp.login.DBContext;
 using Brive.Bootcamp.login.Services;
 using Brive.Bootcamp.login.Services.Implementation;
 using Brive.Bootcamp.login.Utilities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,10 +12,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Brive.Bootcamp.login
@@ -44,13 +47,26 @@ namespace Brive.Bootcamp.login
 
             services.AddTransient<IUsers, ImpUsers>();
             services.AddTransient<IGlobalUtilities, ImpGlobalUtilities>();
-            services.AddCors(o => o.AddPolicy("Login", builder =>
-            {
-                builder.AllowAnyOrigin()
-                 .AllowAnyMethod()
-                 .AllowAnyHeader();
-            }));
-
+            //services.AddCors(o => o.AddPolicy("Login", builder =>
+            //{
+            //    builder.AllowAnyOrigin()
+            //     .AllowAnyMethod()
+            //     .AllowAnyHeader();
+            //}));
+            var secretKey = this.Configuration.GetValue<string>("Secret");
+            services.AddAuthentication(auth => {
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(jwt => {
+                jwt.RequireHttpsMetadata = false;
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
+                    ValidateAudience = false
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
